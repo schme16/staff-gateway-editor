@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html ng-app="USQ">
+
+<head>
+
+	<!--Sets the  text encoding!-->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+	<!--Assigns a shortcut image and favicon!-->
+	<link rel="icon" href="sys/img/icons/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon"  href="sys/img/icons/favicon.ico"  type="image/x-icon">
+	<link rel="shortcut icon"  href="sys/img/icons/favicon.ico"  type="image/vnd.microsoft.icon"><!--The 2010 IANA standard but not supported in IE-->
+
+
+
+
+
+
+
+	<!--The title-->
+	<title>Landing Page Manager</title>
+
+	<style>
+
+		html,body{
+			height:100%;
+			padding: 0;
+			padding-top: 60px;
+			margin:0;
+			-webkit-box-sizing:border-box;
+			-moz-box-sizing:border-box;
+			-ms-box-sizing:border-box;
+			box-sizing:border-box;
+		}
+
+		.__placeholder{
+			background-image: url("sys/img/buttonPlaceholder.png") !important;
+			visibility: visible !important;
+			cursor: default;
+		}
+
+		*[contenteditable]{
+			outline: 2px dashed #e2e2e2;
+			padding:2px;
+			min-height:350px;
+		}
+
+		*[contenteditable] *[contenteditable], .btn{
+			outline: none !important;
+		}
+
+		.navBar{
+			width: 775px;
+			margin: auto;
+			margin-bottom: 10px;
+			background-color: #F9F9F9;
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+			padding: 5px;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			border: #000 5px solid;
+			border-top: none;
+			z-index: 1;
+			text-align: center;
+			height: 37px;
+		}
+
+		*[data-disabled=true]{
+			cursor: pointer !important;
+		}
+
+		body span.__buttonTextNew{
+			margin-top: -14px!important;
+		}
+
+		.toolbar{
+			background: #F9F9F9;
+			border: 5px solid #000;
+			border-top: none;
+			margin: auto;
+			margin-top: 6px;
+			border-bottom-right-radius: 10px;
+			border-bottom-left-radius: 10px;
+			width: 415px;
+		}
+
+		.toolbarButton{
+			width: 21px;
+			margin: 5px;
+			border: 1px solid #EEE;
+		}
+
+		[ng-hide-in-editor] {
+			display:none;
+		}
+		iframe {
+			display: initial !important;
+		}
+	</style>
+
+
+	<!--Styles-->
+	<link rel="stylesheet" href="sys/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="data:text/css;base64,DQoNCg0KDQoNCi8qSGlkZXMgdGhlIHNjcmlwdHMgYmxvY2sqLw0KI2luc3QzNDk1Nzpub3QoLmJsb2NrX3dpdGhfY29udHJvbHMpew0KCWRpc3BsYXk6bm9uZTsNCn0NCg0KLypGaXhlcyB0aGUgdmliZSovDQouX3ZpYmUgew0KCW92ZXJmbG93Om5vbmU7DQoJYmFja2dyb3VuZDogIHRyYW5zcGFyZW50Ow0KCXBvc2l0aW9uOiByZWxhdGl2ZTsNCgl6LWluZGV4OiAwOw0KCW92ZXJmbG93OiBoaWRkZW47DQoJd2lkdGg6IDE3MHB4Ow0KCWhlaWdodDogMTcwcHg7DQoNCn0NCg0KLmNvdXJzZS1jb250ZW50IHsNCglib3gtc2hhZG93OiBub25lOw0KfQ0KLmNvdXJzZS1jb250ZW50ICNzZWN0aW9uLTAgLm5vLW92ZXJmbG93IHsNCglvdmVyZmxvdzpoaWRkZW47DQp9DQoNCi5jb3Vyc2UtY29udGVudCAjc2VjdGlvbi0wLCAuY291cnNlLWNvbnRlbnQgI3NlY3Rpb24tMCAuY29udGVudCB7DQoJYmFja2dyb3VuZDogI2ZmZiAhaW1wb3J0YW50Ow0KfQ0KDQojaW5zdDQyODM2Om5vdCguYmxvY2tfd2l0aF9jb250cm9scyksICNpbnN0NDM1ODI6bm90KC5ibG9ja193aXRoX2NvbnRyb2xzKSB7DQoJZGlzcGxheTpub25lICFpbXBvcnRhbnQ7DQp9DQoNCi5uZy1jbG9haywgLmNwbV93cmFwcGVyLCAgLmNwbV93cmFwcGVyLCAuc3BsYXNoX2J1dHRvbldyYXBwZXIsIC5uYXZfbmF2V3JhcHBlciB7DQoJZGlzcGxheTpub25lOw0KCXZpc2liaWxpdHk6aGlkZGVuOw0KDQp9DQoNCi5fX3BsYWNlaG9sZGVyIHsNCglkaXNwbGF5OiBub25lICFpbXBvcnRhbnQ7DQp9DQoNCi5fX2J1dHRvbiBpbWcgew0KCWRpc3BsYXk6bm9uZTsNCn0NCg0KDQoNCi5fX2J1dHRvbiB7DQoJYm9yZGVyLXJhZGl1czogMTJwdDsNCglib3JkZXItdG9wLWxlZnQtcmFkaXVzOiAwICFpbXBvcnRhbnQ7DQoJYmFja2dyb3VuZC1jb2xvcjogI2YwZjFmMzsNCglib3JkZXI6IDFweCBzb2xpZCAjMzMzMzMzOw0KCXdpZHRoOiAyMjJweDsNCgloZWlnaHQ6NjBweDsNCgltYXJnaW4tbGVmdDogOHB4Ow0KCW1hcmdpbi1yaWdodDogOHB4Ow0KCWRpc3BsYXk6aW5saW5lLXRhYmxlICFpbXBvcnRhbnQ7DQp9DQoNCi5fX3BsYWNlaG9sZGVyIHsNCglkaXNwbGF5OiBub25lICFpbXBvcnRhbnQ7DQp9DQoNCi5fX2J1dHRvbiBpbWcgew0KCWRpc3BsYXk6bm9uZTsNCn0NCg0KLl9fYnV0dG9uIHNwYW4gew0KCWNvbG9yOiAjMzMzMzMzICFpbXBvcnRhbnQ7DQoJdG9wOiAwcHg7DQoJaGVpZ2h0OiAxMDAlICFpbXBvcnRhbnQ7DQoJbWFyZ2luOiBhdXRvOw0KCWJvdHRvbTogMDsNCgl2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlOw0KCWZvbnQtc2l6ZTogMTZweCAhaW1wb3J0YW50Ow0KCWxpbmUtaGVpZ2h0OiAyNnB4IWltcG9ydGFudDsNCglkaXNwbGF5OiB0YWJsZS1jZWxsICFpbXBvcnRhbnQ7DQoJYmFja2dyb3VuZDogIHRyYW5zcGFyZW50ICFpbXBvcnRhbnQ7DQoJYmFja2dyb3VuZC1yZXBlYXQ6IG5vLXJlcGVhdCAhaW1wb3J0YW50Ow0KCWJhY2tncm91bmQtcG9zaXRpb246IDkzJSBjZW50ZXIgIWltcG9ydGFudDsNCgktd2Via2l0LXRyYW5zaXRpb246IGJhY2tncm91bmQtcG9zaXRpb24gNDAwbXMgZWFzZS1vdXQ7DQoJLW1vei10cmFuc2l0aW9uOiBiYWNrZ3JvdW5kLXBvc2l0aW9uIDQwMG1zIGVhc2Utb3V0Ow0KCS1tcy10cmFuc2l0aW9uOiBiYWNrZ3JvdW5kLXBvc2l0aW9uIDQwMG1zIGVhc2Utb3V0Ow0KCS1vLXRyYW5zaXRpb246IGJhY2tncm91bmQtcG9zaXRpb24gNDAwbXMgZWFzZS1vdXQ7DQoJdHJhbnNpdGlvbjogYmFja2dyb3VuZC1wb3NpdGlvbiA0MDBtcyBlYXNlLW91dDsNCgliYWNrZ3JvdW5kLWltYWdlOiB1cmwoJ2RhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEQ5NGJXd2dkbVZ5YzJsdmJqMGlNUzR3SWlCbGJtTnZaR2x1WnowaWRYUm1MVGdpUHo0TkNqd2hMUzBnUjJWdVpYSmhkRzl5T2lCQlpHOWlaU0JKYkd4MWMzUnlZWFJ2Y2lBeE5pNHdMak1zSUZOV1J5QkZlSEJ2Y25RZ1VHeDFaeTFKYmlBdUlGTldSeUJXWlhKemFXOXVPaUEyTGpBd0lFSjFhV3hrSURBcElDQXRMVDROQ2p3aFJFOURWRmxRUlNCemRtY2dVRlZDVEVsRElDSXRMeTlYTTBNdkwwUlVSQ0JUVmtjZ01TNHhMeTlGVGlJZ0ltaDBkSEE2THk5M2QzY3Vkek11YjNKbkwwZHlZWEJvYVdOekwxTldSeTh4TGpFdlJGUkVMM04yWnpFeExtUjBaQ0lnV3cwS0NUd2hSVTVVU1ZSWklITjBNQ0FpWm1sc2JEb2pNek16TXpNek95SStEUXBkUGcwS1BITjJaeUIyWlhKemFXOXVQU0l4TGpFaUlHbGtQU0pNWVhsbGNsOHhJaUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGh0Ykc1ek9uaHNhVzVyUFNKb2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eE9UazVMM2hzYVc1cklpQjRQU0l3Y0hnaUlIazlJakJ3ZUNJTkNna2dkMmxrZEdnOUlqRTBjSGdpSUdobGFXZG9kRDBpTVRFdU16VndlQ0lnZG1sbGQwSnZlRDBpTUNBd0lERTBJREV4TGpNMUlpQnpkSGxzWlQwaVpXNWhZbXhsTFdKaFkydG5jbTkxYm1RNmJtVjNJREFnTUNBeE5DQXhNUzR6TlRzaUlIaHRiRHB6Y0dGalpUMGljSEpsYzJWeWRtVWlQZzBLUEhCaGRHZ2djM1I1YkdVOUlpWnpkREE3SWlCa1BTSk5PUzQwTnl3d0xqTTViRFF1TVRVc05DNHpOVU14TXk0NE9DdzBMams0TERFMExEVXVNeXd4TkN3MUxqWTJjeTB3TGpFekxEQXVOamd0TUM0ek55d3dMamt6YkMwMExqRTFMRFF1TXpkakxUQXVORGtzTUM0MU1pMHhMak1zTUM0MU1pMHhMamM1TERBTkNnbGpMVEF1TkRrdE1DNDFNaTB3TGpRNUxURXVNellzTUMweExqZzNURGt1Tmpnc04wZ3hMakkzUXpBdU5UY3NOeXd3TERZdU5ERXNNQ3cxTGpZM1l6QXRNQzQzTXl3d0xqVTNMVEV1TXpNc01TNHlOeTB4TGpNemFEZ3VOREZzTFRJdE1pNHdPUTBLQ1dNdE1DNDBPUzB3TGpVeUxUQXVORGt0TVM0ek5Td3dMVEV1T0RkRE9DNHhPQzB3TGpFekxEZ3VPVGd0TUM0eE15dzVMalEzTERBdU16bDZJaTgrRFFvOEwzTjJaejROQ2c9PScpICFpbXBvcnRhbnQ7DQp9DQoNCi5fX2J1dHRvbjpob3ZlciB7DQoJYmFja2dyb3VuZC1jb2xvcjogIzU3NTc1NjsNCgljb2xvcjogI2YwZjFmMyAhaW1wb3J0YW50Ow0KfQ0KDQouX19idXR0b246aG92ZXIgc3BhbiB7DQoJY29sb3I6ICNmMGYxZjMgIWltcG9ydGFudDsNCgliYWNrZ3JvdW5kLWltYWdlOiB1cmwoJ2RhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEQ5NGJXd2dkbVZ5YzJsdmJqMGlNUzR3SWlCbGJtTnZaR2x1WnowaWRYUm1MVGdpUHo0TkNqd2hMUzBnUjJWdVpYSmhkRzl5T2lCQlpHOWlaU0JKYkd4MWMzUnlZWFJ2Y2lBeE5pNHdMak1zSUZOV1J5QkZlSEJ2Y25RZ1VHeDFaeTFKYmlBdUlGTldSeUJXWlhKemFXOXVPaUEyTGpBd0lFSjFhV3hrSURBcElDQXRMVDROQ2p3aFJFOURWRmxRUlNCemRtY2dVRlZDVEVsRElDSXRMeTlYTTBNdkwwUlVSQ0JUVmtjZ01TNHhMeTlGVGlJZ0ltaDBkSEE2THk5M2QzY3Vkek11YjNKbkwwZHlZWEJvYVdOekwxTldSeTh4TGpFdlJGUkVMM04yWnpFeExtUjBaQ0lnV3cwS0NUd2hSVTVVU1ZSWklITjBNQ0FpWm1sc2JEb2pSa1pHUmtaR095SStEUXBkUGcwS1BITjJaeUIyWlhKemFXOXVQU0l4TGpFaUlHbGtQU0pNWVhsbGNsOHhJaUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGh0Ykc1ek9uaHNhVzVyUFNKb2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eE9UazVMM2hzYVc1cklpQjRQU0l3Y0hnaUlIazlJakJ3ZUNJTkNna2dkMmxrZEdnOUlqRTBjSGdpSUdobGFXZG9kRDBpTVRFdU16VndlQ0lnZG1sbGQwSnZlRDBpTUNBd0lERTBJREV4TGpNMUlpQnpkSGxzWlQwaVpXNWhZbXhsTFdKaFkydG5jbTkxYm1RNmJtVjNJREFnTUNBeE5DQXhNUzR6TlRzaUlIaHRiRHB6Y0dGalpUMGljSEpsYzJWeWRtVWlQZzBLUEhCaGRHZ2djM1I1YkdVOUlpWnpkREE3SWlCa1BTSk5PUzQwTnl3d0xqTTViRFF1TVRVc05DNHpOVU14TXk0NE9DdzBMams0TERFMExEVXVNeXd4TkN3MUxqWTJjeTB3TGpFeUxEQXVOamd0TUM0ek55d3dMamt6YkMwMExqRTFMRFF1TXpkakxUQXVORGtzTUM0MU1pMHhMak1zTUM0MU1pMHhMamM1TERBTkNnbGpMVEF1TkRrdE1DNDFNaTB3TGpRNUxURXVNellzTUMweExqZzNURGt1Tmpnc04wZ3hMakkzUXpBdU5UY3NOeXd3TERZdU5ERXNNQ3cxTGpZM1l6QXRNQzQzTXl3d0xqVTNMVEV1TXpNc01TNHlOeTB4TGpNemFEZ3VOREZzTFRJdE1pNHdPUTBLQ1dNdE1DNDBPUzB3TGpVeUxUQXVORGt0TVM0ek5Td3dMVEV1T0RkRE9DNHhPQzB3TGpFekxEZ3VPVGd0TUM0eE15dzVMalEzTERBdU16bDZJaTgrRFFvOEwzTjJaejROQ2c9PScpICFpbXBvcnRhbnQ7DQoJYmFja2dyb3VuZC1wb3NpdGlvbjogOTYlICFpbXBvcnRhbnQ7DQp9DQoNCg==" >
+
+
+</head>
+
+<body ng-controller="landingPageCreator" ng-cloak class="{{$root.color}}">
+	<div style="display:none" class="breadcrumb"></div>
+	<script src="../shared/js/combined.min.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="../Staff-Gateway/main.js" type="text/javascript"></script>
+	<script src="sys/js/ui-bootstrap-0.4.0.min.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="../shared/js/tinymce/tinymce.min.js" type="text/javascript" charset="utf-8" ></script>
+	<script src="../shared/js/tinymce-angular.js" type="text/javascript" charset="utf-8" ></script>
+	<script type="text/javascript" charset="utf-8" >
+var l;
+	</script>
+
+	<!--New styles!-->
+	<link rel="stylesheet" type="text/css" href="https://studyreserveprd.usq.edu.au/usq/file/ce09b718-35d9-4c66-87f3-37b9bbc09421/1/sys/css/oldStyle.css" >
+	<link rel="stylesheet" type="text/css" href="../Staff-Gateway/styles.css" >
+
+	<!--instructions!-->
+	<div modal="instructions" options="{backdropClick:true, keyboard:true, backdropFade:true, dialogFade:true}">
+
+		<div class="modal-header">
+			<h3>Help topics</h3>
+		</div>
+		<div class="modal-body">
+			Coming soon.
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-small" ng-click="instructions = false;">Close</button>
+		</div>
+
+	</div>
+
+
+	<!--genLoading!-->
+	<div modal="genLoading" options="{backdropClick:false, keyboard:false, backdropFade:true, dialogFade:true}">
+
+		<div class="modal-header">
+			<h3>Loading</h3>
+		</div>
+		<div class="modal-body">
+			<progress percent="100" style=" height:15px; margin: auto;" class="progress-striped active"></progress>
+		</div>
+
+	</div>
+
+	<!--editing screen!-->
+	<div modal="editBox" options="{backdropClick:false, keyboard:false, backdropFade:true, dialogFade:true}">
+
+		<div class="modal-header">
+			<button class="btn btn-small btn-danger" ng-click="removeButton(editButton)" style="float:right">Delete</button>
+			<h3>Edit button</h3>
+		</div>
+
+		<div class="modal-body" ng-drop="switchImage(l.editBox)">
+
+			<div ng-show="!editBox.loading" class="__button"  style="float:right;">
+				<span class="__buttonTextNew">{{editBox.name||'&nbsp;'}}</span>
+			</div>
+
+			Title: <input ng-model="editBox.name" style="width: 250px; margin-bottom:5px;" maxlength="27"><br>
+
+			Link: <input  ng-model="editBox.url" style="margin-left:1px; width: 250px"><br>
+
+			External link: <input ng-true-value="_blank" ng-false-value="_top" type="checkbox" ng-model="editBox.external" style="margin-top: 0;"><br>
+
+			Disabled: <input ng-true-value="true" ng-false-value="false" type="checkbox" ng-model="editBox.disabled" style="margin-top: 0;">
+
+			<br>
+
+			<br>
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-small btn-success" ng-click="editBox = null" >Done</button>
+		</div>
+
+	</div>
+
+
+
+
+	<!--code box!-->
+	<div modal="loadUrl || !id" options="{backdropClick:false, keyboard:false, backdropFade:true, dialogFade:true}">
+
+		<div class="modal-header">
+			<h3>Paste url of the page you would like to edit</h3>
+		</div>
+
+		<div class="modal-body" style="text-align:center;" ng-hide="loading" >
+			<input placeholder="ie. http://mystaffdesk.usq.edu.au/moodle2/mod/page/view.php?id=27761" ng-model="url" style="width:98%;" >
+		</div>
+
+		<div class="modal-body"  ng-hide="!loading" >
+			<progress percent="100" style=" height:15px; margin: auto;" class="progress-striped active"></progress>
+		</div>
+
+		<div class="modal-footer" style="text-align:right;" >
+			<button class="btn btn-success btn-lrg" ng-click="load(url); url = '';">OK</button>
+			<button class="btn btn-danger btn-lrg" ng-show="!!id" ng-click="url = ''; loadUrl = false">Close</button>
+		</div>
+
+	</div>
+
+
+
+	<div class="navBar">
+		<!--<img ng-click="instructions = true" title="Help" src="sys/img/q.png" width="32" height="32" style=" width:32px; height:32px; float: right; cursor:pointer;">!-->
+		<button class="btn btn-primary" ng-click="loadUrl = true;">Load</button>
+		<button class="btn btn-success" ng-class="{'btn-disabled': !!id}" ng-click="save()">Save</button>
+
+
+			<label class="btn btn-small" for="image" style="margin:5px;" ng-click="buttonArray.push({name:'placeholder', link:''})">Add Button</label>
+
+
+
+
+
+		<br>
+		<div class="toolbar">
+			<img class="toolbarButton" ng-repeat="tool in tools" ng-hide="tool.test" ng-click="tool.func()" title="{{tool.title}}" ng-src="sys/img/tools/{{tool.title}}.png">
+		</div>
+	</div>
+
+
+	<div style="text-align: center; padding: 20px; color: rgba(0, 0, 0, 0.3); font-weight: bold; font-size: 12px;" class="ng-binding">
+		<span style="font-size: 16px; color:#000;">MoodlePage Manager:</span>
+		{{l.pageTitle}}
+	</div>
+
+
+	<!--The page thats being created!-->
+	<div class="landingPage" style="margin-top: 30px; visibility: hidden;">
+		<div class="__landingPageBody gw_v2 ng-cloak" ng-cloak ng-class="{'_hideIcon':showIcon}">
+			<textarea class="editorItem" ui-tinymce="getOptions('__landingPageBody __blurb')" ng-model="blurb"></textarea>
+			<div ng-bind-html-unsafe="blurb" ng-hide-in-editor class="blurbHidden __blurb"></div>
+
+			<div ng-drop="buttons" ng-drop-limit="1" class="__buttonRow">
+
+				<hr class="__gradient" >
+
+				<a  ng-repeat="button in buttonArray" draggable="true" href="{{button.url}}" data-index="{{$index}}" data-disabled="{{button.disabled}}" data-clicky="{{button.onclick}}" data-doubleclicky="{{button.ondblclick}}" target="{{button.external||''}}" ng-click="$parent.editBox = button;" ng-class="{'__placeholder':!button.name}" class="__button" ng-init="$parent.killClicks()">
+					<img  class="__buttonBG" ng-class="{'editorItem': !button.image}" ng-src="{{button.image||'https://studyreserveprd.usq.edu.au/usq/file/ce09b718-35d9-4c66-87f3-37b9bbc09421/1/landingPageManager/sys/img/buttonPlaceholder.png'}}">
+					<span ng-invisible="button.name" class="__buttonTextNew">{{button.name||'&nbsp;'}}</span>
+				</a>
+
+				<hr class="__gradient" >
+
+			</div>
+
+		</div>
+
+
+	</div>
+
+
+
+	<!--genLoading!-->
+	<div modal="errorBox" options="{backdropClick:false, keyboard:false, backdropFade:true, dialogFade:true}">
+
+		<div class="modal-header">
+			<h3>Oops... Something went wrong!</h3>
+		</div>
+		<div class="modal-body text">
+
+		</div>
+
+	</div>
+
+
+
+
+
+	<!--changes the icon
+	<script>
+		var _a,_b,_c;
+	</script>
+	<iframe style="display: none !important;" id="mystaffdesk" src="//mystaffdesk.usq.edu.au/moodle2/pluginfile.php/80519/mod_resource/content/9999999/mule.html" onload=" _a = true; if(_b && _c){l.init()}"></iframe>
+	<iframe style="display: none !important;" id="studyreserveprd" src="//studyreserveprd.usq.edu.au/usq/file/0ba63021-40d0-4969-b503-fc71c5fd0e11/1/mule.html" onload="_b = true; if(_a && _c){l.init();}"></iframe>
+	<iframe style="display: none !important;" id="opendesk" src="//open.usq.edu.au/pluginfile.php/71850/mod_resource/content/99999/mule.html" onload="_c = true; if(_a && _b){l.init();}"></iframe>
+	!-->
+
+	<script src="sys/js/main.js" type="text/javascript" charset="utf-8" ></script>
+
+</body>
+
+</html>
